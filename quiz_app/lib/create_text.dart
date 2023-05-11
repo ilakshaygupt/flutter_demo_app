@@ -5,6 +5,7 @@ class CreateText extends StatelessWidget {
     this.text,
     this.fontsize,
     this.colors, {
+    this.align,
     this.isBold = false,
     Key? key,
   }) : super(key: key);
@@ -13,7 +14,7 @@ class CreateText extends StatelessWidget {
   final String text;
   final Color colors;
   final bool isBold;
-
+  final TextAlign? align;
   @override
   Widget build(BuildContext context) {
     return Text(
@@ -23,6 +24,7 @@ class CreateText extends StatelessWidget {
         fontSize: fontsize,
         fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
       ),
+      textAlign: align,
     );
   }
 }
