@@ -42,13 +42,17 @@ class _QuestionScreen extends State<QuestionScreen> {
                   color: Colors.white,
                   fontSize: 24,
                   fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
             ),
             const SizedBox(height: 30),
             ...currentQuestion.getShuffledAnswers().map((item) {
-              return AnswerButton(item, () {
-                answerQuestion(item);
-              });
-            })
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5.0),
+                child: AnswerButton(item, () {
+                  answerQuestion(item);
+                }),
+              );
+            }).toList()
           ],
         ),
       ),
