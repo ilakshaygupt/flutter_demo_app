@@ -14,18 +14,21 @@ class QuestionSummary extends StatelessWidget {
         child: Column(
           children: summaryData.map(
             (data) {
+              final bool isAnswerCorrect =
+                  data['user_answer'] == data['correct_answer'];
+              final Color circleColor =
+                  isAnswerCorrect ? Colors.green : Colors.red;
               return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    width: 35,
-                    decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Color.fromARGB(255, 88, 163, 197)),
+                  CircleAvatar(
+                    radius: 18,
+                    backgroundColor: circleColor,
                     child: CreateText(
-                        ((data['question_index'] as int) + 1).toString(),
-                        20,
-                        Colors.white,
-                        align: TextAlign.center),
+                      ((data['question_index'] as int) + 1).toString(),
+                      20,
+                      Colors.white,
+                    ),
                   ),
                   const SizedBox(
                     width: 10,
@@ -44,7 +47,7 @@ class QuestionSummary extends StatelessWidget {
                           height: 5,
                         ),
                         CreateText(data['correct_answer'] as String, 13,
-                            const Color.fromARGB(121, 67, 145, 77),
+                            const Color.fromARGB(121, 17, 152, 193),
                             align: TextAlign.left),
                         CreateText(data['user_answer'] as String, 13,
                             Colors.lightBlueAccent,

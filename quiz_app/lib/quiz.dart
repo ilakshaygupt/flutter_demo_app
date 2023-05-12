@@ -5,7 +5,8 @@ import 'package:quiz_app/results_screen.dart';
 import 'package:quiz_app/start_screen.dart';
 
 class Quiz extends StatefulWidget {
-  const Quiz({super.key});
+  const Quiz(this.isRestart, {super.key});
+  final bool isRestart;
   @override
   State<Quiz> createState() {
     return _QuizState();
@@ -15,18 +16,14 @@ class Quiz extends StatefulWidget {
 class _QuizState extends State<Quiz> {
   List<String> selectedAnswers = [];
   var activeScreen = 'start-screen';
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isRestart) {
+      activeScreen = 'questions-screen';
+    }
+  }
 
-  // Widget? activeScreen;
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   activeScreen = StartScreen(switchScreen);
-  // }
-  // void switchScreen() {
-  //   setState(() {
-  //     activeScreen = const QuestionScreen();
-  //   });
-  // }
   void switchScreen() {
     setState(() {
       activeScreen = 'questions-screen';
@@ -37,14 +34,13 @@ class _QuizState extends State<Quiz> {
     selectedAnswers.add(answer);
     if (selectedAnswers.length == questions.length) {
       setState(() {
-        // selectedAnswers = [];
         activeScreen = 'results-screen';
       });
     }
   }
 
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     Widget screenWidget = StartScreen(switchScreen);
     if (activeScreen == 'questions-screen') {
       screenWidget = QuestionScreen(onSelectAnswer: chooseAnswer);
@@ -58,11 +54,10 @@ class _QuizState extends State<Quiz> {
         body: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(colors: [
-              Color.fromARGB(155, 123, 7, 212),
+              Color.fromARGB(161, 245, 8, 8),
               Color.fromARGB(255, 126, 9, 162)
             ], begin: Alignment.bottomRight, end: Alignment.topLeft),
           ),
-          // child: activeScreen
           child: screenWidget,
         ),
       ),
