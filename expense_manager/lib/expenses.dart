@@ -50,13 +50,23 @@ class _ExpensesState extends State<Expenses> {
     setState(() {
       _registeredExpenses.remove(expense);
     });
-    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context)
+        .clearSnackBars(); //remove previous SnackBar if 2 or more items are deleted together
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         duration: const Duration(seconds: 3),
-        content: const Text('Expense Deleted'),
+        content: const Text(
+          'Expense Deleted',
+          style: TextStyle(
+            color: Colors.white, // White text color
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: const Color(0xFF303F9F),
         action: SnackBarAction(
           label: 'UNDO',
+          textColor: Colors.white,
           onPressed: () {
             setState(
               () {

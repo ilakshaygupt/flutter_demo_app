@@ -81,7 +81,10 @@ class _NewExpenseState extends State<NewExpense> {
               controller: _titleController,
               maxLength: 40,
               keyboardType: TextInputType.text,
-              decoration: const InputDecoration(label: Text('Title')),
+              decoration: const InputDecoration(
+                label: Text('NOTE'),
+                hintText: 'Food , Travel ...',
+              ),
             ),
             Row(
               children: [
@@ -90,7 +93,7 @@ class _NewExpenseState extends State<NewExpense> {
                   controller: _amountController,
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
-                      prefixText: '\$', label: Text('Title')),
+                      prefixText: '₹', label: Text('MONEY')),
                 )),
                 const SizedBox(width: 10),
                 Expanded(
@@ -110,7 +113,7 @@ class _NewExpenseState extends State<NewExpense> {
               ],
             ),
             const SizedBox(
-              height: 10,
+              height: 20,
             ),
             Row(
               children: [
@@ -134,7 +137,7 @@ class _NewExpenseState extends State<NewExpense> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: const Text('cancel')),
+                    child: const Text('CANCEL')),
                 ElevatedButton(
                     onPressed: () {
                       _submitExpenseData();
