@@ -4,6 +4,8 @@ import 'package:expense_manager/widget/new_expense.dart';
 import 'package:flutter/material.dart';
 import 'package:expense_manager/models/expense.dart';
 
+bool isDarkMode = false;
+
 class Expenses extends StatefulWidget {
   const Expenses({super.key});
   @override
@@ -37,6 +39,10 @@ class _ExpensesState extends State<Expenses> {
     setState(() {
       _registeredExpenses.add(expense);
     });
+  }
+
+  void toggleTheme() {
+    isDarkMode = !isDarkMode;
   }
 
   void _removeExpense(Expense expense) {
@@ -75,13 +81,28 @@ class _ExpensesState extends State<Expenses> {
     return Scaffold(
       appBar: AppBar(title: const Text("EXPENSE TRACKER"), actions: [
         IconButton(
-            onPressed: _openAddExpenseOverlay, icon: const Icon(Icons.add))
+          onPressed: () {
+            setState(() {
+              isDarkMode == true ? ThemeMode.light : ThemeMode.dark;
+              isDarkMode = !isDarkMode;
+            });
+          },
+          icon: Icon(isDarkMode ? Icons.light_mode : Icons.dark_mode),
+        ),
       ]),
       body: Column(
         children: [
           Chart(expenses: _registeredExpenses),
           Expanded(child: mainContent),
         ],
+      ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.fromLTRB(0, 0, 15, 15),
+        child: FloatingActionButton(
+          onPressed: _openAddExpenseOverlay,
+          backgroundColor: Theme.of(context).primaryColor,
+          child: const Icon(Icons.add),
+        ),
       ),
     );
   }
