@@ -30,6 +30,8 @@ class _ExpensesState extends State<Expenses> {
 
   void _openAddExpenseOverlay() {
     showModalBottomSheet(
+        useSafeArea:
+            true, //stay away from devie feature saffold uses internally
         isScrollControlled: true,
         context: context,
         builder: (ctx) => NewExpense(onAddExpense: _addExpense));
@@ -81,6 +83,7 @@ class _ExpensesState extends State<Expenses> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     Widget mainContent = const Center(child: Text('NO EXPENSES FOUND'));
     if (_registeredExpenses.isNotEmpty) {
       mainContent = ExpensesList(
@@ -100,12 +103,24 @@ class _ExpensesState extends State<Expenses> {
           icon: Icon(isDarkMode ? Icons.light_mode : Icons.dark_mode),
         ),
       ]),
-      body: Column(
-        children: [
-          Chart(expenses: _registeredExpenses),
-          Expanded(child: mainContent),
-        ],
-      ),
+      body: width < 600
+          ? Column(
+              children: [
+                Chart(expenses: _registeredExpenses),
+                Expanded(child: mainContent),
+              ],
+            )
+          : Row(
+              children: [
+                Expanded(
+                  //it takes size only the size of screen
+                  child: Chart(
+                      expenses:
+                          _registeredExpenses), // so that it takes ramining space and not whole size
+                ),
+                Expanded(child: mainContent),
+              ],
+            ),
       floatingActionButton: Padding(
         padding: const EdgeInsets.fromLTRB(0, 0, 15, 15),
         child: FloatingActionButton(
