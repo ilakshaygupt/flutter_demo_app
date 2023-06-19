@@ -100,21 +100,43 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const Row(
+              children: [
+                Text(
+                  'DEGREE',
+                ),
+                SizedBox(
+                  width: 190,
+                ),
+                Text('TYPE')
+              ],
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
-                  height: 40,
+                  height: 41,
                   child: SizedBox(
                     width: 200,
                     child: TextField(
                       controller: celsiusController,
                       keyboardType: TextInputType.number,
+                      cursorColor: Colors.deepPurple,
                       decoration: const InputDecoration(
-                        labelText: 'ENTER TEMPERATURE',
-                        labelStyle: TextStyle(color: Colors.white),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.deepPurple, width: 2.0),
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.deepPurple, width: 2.0),
+                        ),
+                        hintText: ('ENTER TEMPERATURE'),
+                        labelStyle: TextStyle(
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
@@ -131,8 +153,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           (category) => DropdownMenuItem(
                             value: category,
                             child: Container(
-                              height:
-                                  56, // Set the height to match the TextButton
+                              height: 56,
                               alignment: Alignment.center,
                               child: Text(
                                 category
@@ -140,7 +161,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                     .split('.')
                                     .last
                                     .toUpperCase(),
-                                style: const TextStyle(color: Colors.white),
+                                style: const TextStyle(
+                                    color: Color.fromARGB(218, 255, 255, 255)),
                               ),
                             ),
                           ),
@@ -154,6 +176,17 @@ class _MyHomePageState extends State<MyHomePage> {
                         selectedTemp = value;
                       });
                     },
+                    underline: Container(
+                      height: 2,
+                      decoration: const BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Colors.deepPurple,
+                            width: 2.0,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -168,7 +201,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   enabled: false,
                   decoration: const InputDecoration(
                     labelText: 'CELSIUS',
-                    labelStyle: TextStyle(color: Colors.white),
+                    labelStyle: TextStyle(color: Colors.white, fontSize: 18),
                   ),
                 ),
                 const SizedBox(
@@ -179,7 +212,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   enabled: false,
                   decoration: const InputDecoration(
                     labelText: 'KELVIN',
-                    labelStyle: TextStyle(color: Colors.white),
+                    labelStyle: TextStyle(color: Colors.white, fontSize: 18),
                   ),
                 ),
                 const SizedBox(
@@ -190,7 +223,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   enabled: false,
                   decoration: const InputDecoration(
                     labelText: 'FAHRENHEIT',
-                    labelStyle: TextStyle(color: Colors.white),
+                    labelStyle: TextStyle(color: Colors.white, fontSize: 18),
                   ),
                 ),
               ],
