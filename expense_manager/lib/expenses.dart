@@ -1,40 +1,48 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:expense_manager/models/expense.dart';
 import 'package:expense_manager/expenses_list.dart';
 import 'package:expense_manager/widget/chart/chart.dart';
 import 'package:expense_manager/widget/new_expense.dart';
-import 'package:flutter/material.dart';
-import 'package:expense_manager/models/expense.dart';
-
-bool isDarkMode = false;
 
 class Expenses extends StatefulWidget {
   const Expenses({super.key});
+
   @override
-  State<Expenses> createState() {
-    return _ExpensesState();
-  }
+  State<Expenses> createState() => _ExpensesState();
 }
 
 class _ExpensesState extends State<Expenses> {
   final List<Expense> _registeredExpenses = [
     Expense(
-        title: 'flutter course',
-        amount: 500,
-        date: DateTime.now(),
-        category: Category.entertainment),
+      title: 'flutter course',
+      amount: 500,
+      date: DateTime.now(),
+      category: Category.entertainment,
+    ),
     Expense(
-        title: 'flutter work',
-        amount: 5000,
-        date: DateTime.now(),
-        category: Category.other),
+      title: 'flutter work',
+      amount: 5000,
+      date: DateTime.now(),
+      category: Category.other,
+    ),
   ];
+
+  late ThemeController themeController;
+
+  @override
+  void initState() {
+    super.initState();
+    themeController = Get.put(ThemeController());
+  }
 
   void _openAddExpenseOverlay() {
     showModalBottomSheet(
-        useSafeArea:
-            true, //stay away from devie feature saffold uses internally
-        isScrollControlled: true,
-        context: context,
-        builder: (ctx) => NewExpense(onAddExpense: _addExpense));
+      useSafeArea: true,
+      isScrollControlled: true,
+      context: context,
+      builder: (ctx) => NewExpense(onAddExpense: _addExpense),
+    );
   }
 
   void _addExpense(Expense expense) {
@@ -43,24 +51,19 @@ class _ExpensesState extends State<Expenses> {
     });
   }
 
-  void toggleTheme() {
-    isDarkMode = !isDarkMode;
-  }
-
   void _removeExpense(Expense expense) {
     final expenseIndex = _registeredExpenses.indexOf(expense);
     setState(() {
       _registeredExpenses.remove(expense);
     });
-    ScaffoldMessenger.of(context)
-        .clearSnackBars(); //remove previous SnackBar if 2 or more items are deleted together
+    ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         duration: const Duration(seconds: 3),
         content: const Text(
           'Expense Deleted',
           style: TextStyle(
-            color: Colors.white, // White text color
+            color: Colors.white,
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
@@ -92,17 +95,21 @@ class _ExpensesState extends State<Expenses> {
       );
     }
     return Scaffold(
-      appBar: AppBar(title: const Text("EXPENSE TRACKER"), actions: [
-        IconButton(
-          onPressed: () {
-            setState(() {
-              isDarkMode == true ? ThemeMode.light : ThemeMode.dark;
-              isDarkMode = !isDarkMode;
-            });
-          },
-          icon: Icon(isDarkMode ? Icons.light_mode : Icons.dark_mode),
-        ),
-      ]),
+      appBar: AppBar(
+        title: const Text("EXPENSE TRACKER"),
+        actions: [
+          IconButton(
+            onPressed: () {
+              themeController.toggleTheme();
+            },
+            icon: Obx(() => Icon(
+              themeController.isDarkMode.value
+                  ? Icons.light_mode
+                  : Icons.dark_mode,
+            )),
+          ),
+        ],
+      ),
       body: width < 600
           ? Column(
               children: [
@@ -113,10 +120,7 @@ class _ExpensesState extends State<Expenses> {
           : Row(
               children: [
                 Expanded(
-                  //it takes size only the size of screen
-                  child: Chart(
-                      expenses:
-                          _registeredExpenses), // so that it takes ramining space and not whole size
+                  child: Chart(expenses: _registeredExpenses),
                 ),
                 Expanded(child: mainContent),
               ],
@@ -130,5 +134,14 @@ class _ExpensesState extends State<Expenses> {
         ),
       ),
     );
+  }
+}
+
+class ThemeController extends GetxController {
+  RxBool isDarkMode = true.obs;
+
+  void toggleTheme() {
+    isDarkMode.toggle();
+    Get.changeThemeMode(isDarkMode.value ? ThemeMode.dark : ThemeMode.light);
   }
 }
