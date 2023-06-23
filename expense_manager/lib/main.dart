@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:expense_manager/expenses.dart';
+import 'package:get/get.dart';
 // import 'package:flutter/services.dart';
 
 var kColorScheme =
@@ -8,11 +9,15 @@ var kColorScheme =
 var kDarkColorTheme = ColorScheme.fromSeed(
     brightness: Brightness.dark,
     seedColor: const Color.fromARGB(255, 5, 99, 125));
+
+
 void main() {
   // WidgetsFlutterBinding.ensureInitialized();
   // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
   //     .then((fn) {
-  runApp(MaterialApp(
+    
+  runApp(GetMaterialApp(
+    debugShowCheckedModeBanner: false,
     darkTheme: ThemeData.dark().copyWith(
       useMaterial3: true,
       colorScheme: kDarkColorTheme,
@@ -46,7 +51,7 @@ void main() {
                 color: kColorScheme.onSecondaryContainer,
                 fontSize: 18))),
     //some deafult themes while overwriting selected themes
-    themeMode: ThemeMode.system,
+    // themeMode: ThemeMode.system,
     home: const Expenses(),
   ));
   // });
