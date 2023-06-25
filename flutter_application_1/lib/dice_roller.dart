@@ -37,6 +37,7 @@ class _DiceRollerState extends State<DiceRoller> {
               ),
               backgroundColor: Colors.green,
               elevation: 25,
+              
               shadowColor: Colors.black),
           child: const CreateText("ROLL DICE", 23, Colors.black, isBold: true),
         )
