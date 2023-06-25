@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:expense_manager/models/expense.dart';
 import 'package:expense_manager/expenses_list.dart';
 import 'package:expense_manager/widget/chart/chart.dart';
@@ -13,20 +16,7 @@ class Expenses extends StatefulWidget {
 }
 
 class _ExpensesState extends State<Expenses> {
-  final List<Expense> _registeredExpenses = [
-    Expense(
-      title: 'flutter course',
-      amount: 500,
-      date: DateTime.now(),
-      category: Category.entertainment,
-    ),
-    Expense(
-      title: 'flutter work',
-      amount: 5000,
-      date: DateTime.now(),
-      category: Category.other,
-    ),
-  ];
+  List<Expense> _registeredExpenses = [];
 
   late ThemeController themeController;
 
@@ -34,6 +24,28 @@ class _ExpensesState extends State<Expenses> {
   void initState() {
     super.initState();
     themeController = Get.put(ThemeController());
+    _loadExpenses();
+  }
+
+  void _loadExpenses() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final List<String>? expenseStrings = prefs.getStringList('expenses');
+    if (expenseStrings != null) {
+      setState(() {
+        _registeredExpenses = expenseStrings
+            .map(
+                (e) => Expense.fromJson(json.decode(e) as Map<String, dynamic>))
+            .toList();
+      });
+    }
+  }
+
+  void _saveExpenses() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final expenseStrings = _registeredExpenses
+        .map((expense) => json.encode(expense.toJson()))
+        .toList();
+    await prefs.setStringList('expenses', expenseStrings);
   }
 
   void _openAddExpenseOverlay() {
@@ -48,6 +60,7 @@ class _ExpensesState extends State<Expenses> {
   void _addExpense(Expense expense) {
     setState(() {
       _registeredExpenses.add(expense);
+      _saveExpenses(); // Save expenses to shared preferences
     });
   }
 
@@ -55,6 +68,7 @@ class _ExpensesState extends State<Expenses> {
     final expenseIndex = _registeredExpenses.indexOf(expense);
     setState(() {
       _registeredExpenses.remove(expense);
+      _saveExpenses(); // Save expenses to shared preferences
     });
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
@@ -76,6 +90,7 @@ class _ExpensesState extends State<Expenses> {
             setState(
               () {
                 _registeredExpenses.insert(expenseIndex, expense);
+                _saveExpenses(); // Save expenses to shared preferences
               },
             );
           },
@@ -103,10 +118,10 @@ class _ExpensesState extends State<Expenses> {
               themeController.toggleTheme();
             },
             icon: Obx(() => Icon(
-              themeController.isDarkMode.value
-                  ? Icons.light_mode
-                  : Icons.dark_mode,
-            )),
+                  themeController.isDarkMode.value
+                      ? Icons.light_mode
+                      : Icons.dark_mode,
+                )),
           ),
         ],
       ),
